@@ -23,11 +23,24 @@ defmodule Nucdawn.URL do
         |> format_wikipedia_snippet()
       nil ->
         url
+        |> validate_url()
         |> get_url_info()
         |> format_url_info(url)
     end
   end
 
+  defp validate_url(url) do
+    url
+    |> URI.parse
+    |> Map.get(:host)
+    |> PublicSuffix.matches_explicit_rule?
+    |> case do
+         true -> url
+         false -> nil
+       end
+  end
+
+  defp get_url_info(nil), do: nil
   defp get_url_info(url) do
     case HTTPoison.get(url) do
       {:ok, %{status_code: 200, body: body}} ->

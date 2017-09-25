@@ -10,4 +10,7 @@ defmodule Nucdawn.Helpers do
     |> Integer.to_string()
     |> String.slice(0, maximum)
   end
+  def truncate(nil, _) do
+    nil
+  end
 end
