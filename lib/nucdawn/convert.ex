@@ -68,7 +68,7 @@ defmodule Nucdawn.Convert do
       :mmHg -> [:Pa, :hPa, :kPa, :bar, :at, :atm, :psi]
       :psi -> [:Pa, :hPa, :kPa, :bar, :at, :atm, :mmHg, :psi]
       # Memory. Add PB and above?
-      :B -> [:KiB, :KB, :MiB, :MB, :GiB, :GB, :TiB, :TB]
+      :B -> [:b, :KiB, :KB, :MiB, :MB, :GiB, :GB, :TiB, :TB]
       :KB -> [:B, :KiB, :MiB, :MB, :GiB, :GB, :TiB, :TB]
       :MB -> [:B, :KiB, :KB, :MiB, :GiB, :GB, :TiB, :TB]
       :GB -> [:B, :KiB, :KB, :MiB, :MB, :GiB, :TiB, :TB]
@@ -77,6 +77,11 @@ defmodule Nucdawn.Convert do
       :MiB -> [:B, :KiB, :KB, :MB, :GiB, :GB, :TiB, :TB]
       :GiB -> [:B, :KiB, :KB, :MiB, :MB, :GiB, :GB, :TiB, :TB]
       :TiB -> [:B, :KiB, :KB, :MiB, :MB, :GiB, :GB, :TB]
+      :b -> [:Kb, :Mb, :Gb, :B, :KB, :MB]
+      :Kb -> [:b, :Mb, :Gb, :B, :KB, :MB]
+      :Mb -> [:b, :Kb, :Gb, :B, :KB, :MB, :GB]
+      :Gb -> [:b, :Kb, :Mb, :Tb, :B, :KB, :MB, :GB, :TB]
+      :Tb -> [:b, :Kb, :Mb, :B, :KB, :MB, :GB, :TB]
       _ -> nil
     end
   end
