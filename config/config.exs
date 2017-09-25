@@ -36,14 +36,24 @@ config :darkskyx,
 
 config :ex_uc,
   #precision: 4,
-  allow_exact_results: true,
+  allow_exact_results: true
   
-  fur: ["furlong", "furlongs"],
-  fir: ["firkin", "firkins"],
-  ftn: ["fortnight", "fortnights"],
+config :ex_uc, :length_units,
+  fur: ["furlong", "furlongs"]
 
-  fur_to_yd: 220,
-  fir_to_lb: 90,
+config :ex_uc, :mass_units,
+  fir: ["firkin", "firkins"]
+
+config :ex_uc, :time_units,
+  ftn: ["fortnight", "fortnights"]
+
+config :ex_uc, :length_conversions,
+  fur_to_yd: 220
+
+config :ex_uc, :mass_conversions,
+  fir_to_lb: 90
+
+config :ex_uc, :time_conversions,
   ftn_to_d: 14
 
 import_config "#{Mix.env}.exs"
