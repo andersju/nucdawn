@@ -34,6 +34,10 @@ defmodule Nucdawn.Convert do
       :yd -> [:m]
       :mi -> [:km]
       :fur -> [:yd, :m]
+      :au -> [:m, :km, :ft, :mi, :ly, :pc]
+      :ly -> [:m, :km, :ft, :mi, :au, :pc]
+      :pc -> [:m, :km, :ft, :mi, :au, :ly]
+      :atpc -> [:cm, :m, :in, :ft]
       # Mass
       :mg -> [:oz]
       :g -> [:lb_oz]
@@ -82,6 +86,19 @@ defmodule Nucdawn.Convert do
       :Mb -> [:b, :Kb, :Gb, :B, :KB, :MB, :GB]
       :Gb -> [:b, :Kb, :Mb, :Tb, :B, :KB, :MB, :GB, :TB]
       :Tb -> [:b, :Kb, :Mb, :B, :KB, :MB, :GB, :TB]
+      # Area
+      :km2 -> [:m2, :sqmi, :ha, :ac, :fifa_field, :belgium]
+      :m2 -> [:sqft, :km2, :fifa_field]
+      :cm2 -> [:mm2, :m2]
+      :mm2 -> [:cm2, :sqin]
+      :sqmi -> [:m2, :km2, :fifa_field, :belgium]
+      :sqyd -> [:sqft, :sqmi, :m2, :km2]
+      :sqft -> [:m2, :km2, :sqmi]
+      :sqin -> [:sqft, :mm2, :cm2]
+      :ha -> [:ac, :km2, :sqmi, :fifa_field]
+      :ac -> [:ha, :km2, :sqmi, :fifa_field]
+      :fifa_field -> [:m2, :km2, :sqmi]
+      :belgium -> [:km2, :sqmi, :fifa_field]
       _ -> nil
     end
   end

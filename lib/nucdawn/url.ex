@@ -31,9 +31,9 @@ defmodule Nucdawn.URL do
 
   defp validate_url(url) do
     url
-    |> URI.parse
+    |> URI.parse()
     |> Map.get(:host)
-    |> PublicSuffix.matches_explicit_rule?
+    |> PublicSuffix.matches_explicit_rule?()
     |> case do
          true -> url
          false -> nil

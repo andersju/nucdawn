@@ -24,7 +24,7 @@ Say you make some changes to `lib/nucdawn/currency.ex`; in `iex` you can then ju
 [ngircd](https://ngircd.barton.de/) is useful for local testing.)
 
 ### URL previews
-The bot previews URLs by default. For now it just shows title + URL; including descriptions might be too spammy. This can be disabled -- look for the `url_previews` configuration key in `config/config.exs`. Wikipedia.org URLs are detected and handled by the Wikipedia module.
+The bot previews URLs by default. For now it just shows title + host; including descriptions might be too spammy. This can be disabled -- look for the `url_previews` configuration key in `config/config.exs`. Wikipedia.org URLs are detected and handled by the Wikipedia module.
 
 ### Weather
 The weather module uses the Google Maps Geocoding API to figure out coordinates for a given location,
