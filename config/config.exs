@@ -36,6 +36,14 @@ config :darkskyx,
 
 config :ex_uc,
   #precision: 4,
-  allow_exact_results: true
+  allow_exact_results: true,
+  
+  fur: ["furlong", "furlongs"],
+  fir: ["firkin", "firkins"],
+  ftn: ["fortnight", "fortnights"],
+
+  fur_to_yd: 220,
+  fir_to_lb: 90,
+  ftn_to_d: 14
 
 import_config "#{Mix.env}.exs"
