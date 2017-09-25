@@ -33,12 +33,14 @@ defmodule Nucdawn.Convert do
       :ft -> [:m]
       :yd -> [:m]
       :mi -> [:km]
+      :fur -> [:yd, :m]
       # Mass
       :mg -> [:oz]
       :g -> [:lb_oz]
       :kg -> [:lb_oz]
       :oz -> [:g]
       :lb -> [:kg]
+      :fir -> [:lb, :kg]
       # Time
       :μs -> [:ms, :s]
       :ms -> [:μs, :s]
@@ -46,6 +48,7 @@ defmodule Nucdawn.Convert do
       :min -> [:min, :h]
       :h -> [:min, :d]
       :d -> [:h]
+      :ftn -> [:d]
       # Temperature
       :C -> [:F, :K]
       :F -> [:C, :K]
