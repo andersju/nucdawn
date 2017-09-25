@@ -18,6 +18,7 @@ defmodule Nucdawn do
     end
     match ".rand :low :high", :rand, match_group: "[0-9]+"
     match ".convert ~value", :convert
+    match ".ccc", :ccc
   end
 
   defp rate_limit(message) do
