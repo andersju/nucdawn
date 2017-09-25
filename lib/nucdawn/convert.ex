@@ -26,8 +26,8 @@ defmodule Nucdawn.Convert do
     case value do
       # Length
       :mm -> [:in]
-      :cm -> [:ft_in]
-      :m -> [:ft_in, :yd]
+      :cm -> [:ft_in, :apc]
+      :m -> [:ft_in, :yd, :apc]
       :km -> [:mi]
       :in -> [:mm, :cm]
       :ft -> [:m]
@@ -37,7 +37,7 @@ defmodule Nucdawn.Convert do
       :au -> [:m, :km, :ft, :mi, :ly, :pc]
       :ly -> [:m, :km, :ft, :mi, :au, :pc]
       :pc -> [:m, :km, :ft, :mi, :au, :ly]
-      :atpc -> [:cm, :m, :in, :ft]
+      :apc -> [:cm, :m, :in, :ft]
       # Mass
       :mg -> [:oz]
       :g -> [:lb_oz]

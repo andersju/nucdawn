@@ -43,14 +43,14 @@ config :ex_uc, :length_units,
   pc: ["parsec", "parsecs"],
   ly: ["light-year", "light-years", "light year", "light years"],
   au: ["ua", "astronomical unit", "astronomical units"],
-  atpc: ["attoparsec", "attoparsecs"]
+  apc: ["attoparsec", "attoparsecs"]
 
 config :ex_uc, :length_conversions,
   fur_to_yd: 220,
   pc_to_m: 30_857_000_000_000_000,
   ly_to_m: 9_460_700_000_000_000,
   au_to_m: 149_597_870_700,
-  atpc_to_m: 0.03086
+  apc_to_m: 0.03086
 
 config :ex_uc, :mass_units,
   fir: ["firkin", "firkins"]
