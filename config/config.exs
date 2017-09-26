@@ -64,6 +64,11 @@ config :ex_uc, :time_units,
 config :ex_uc, :time_conversions,
   ftn_to_d: 14
 
+config :ex_uc, :temperature_units,
+  C: ["c", "Celsius", "celsius"],
+  F: ["f", "Fahrenheit", "fahrenheit"],
+  K: ["k", "Kelvin", "kelvin"]
+
 config :ex_uc, :area_units,
   km2: ["square kilometer", "square kilometers", "sqkm"],
   m2: ["square meter", "square meters", "sqm"],
