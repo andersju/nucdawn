@@ -13,7 +13,7 @@ defmodule Nucdawn.Convert do
   end
 
   defp parse_input(input) do
-    Regex.named_captures(~r/^(?<from>[\w\s\/]+?) (?:to|in|into) (?<to>[\w\s\/]+)/, input)
+    Regex.named_captures(~r/^(?<from>[\w\s\.\/]+?) (?:to|in|into) (?<to>[\w\s\/]+)/, input)
     |> case do
          nil -> nil
          map -> map
