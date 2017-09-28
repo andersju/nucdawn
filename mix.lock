@@ -10,7 +10,7 @@
   "hackney": {:hex, :hackney, "1.9.0", "51c506afc0a365868469dcfc79a9d0b94d896ec741cfd5bd338f49a5ec515bfe", [:rebar3], [{:certifi, "2.0.0", [hex: :certifi, repo: "hexpm", optional: false]}, {:idna, "5.1.0", [hex: :idna, repo: "hexpm", optional: false]}, {:metrics, "1.0.1", [hex: :metrics, repo: "hexpm", optional: false]}, {:mimerl, "1.0.2", [hex: :mimerl, repo: "hexpm", optional: false]}, {:ssl_verify_fun, "1.1.1", [hex: :ssl_verify_fun, repo: "hexpm", optional: false]}], "hexpm"},
   "httpoison": {:hex, :httpoison, "0.13.0", "bfaf44d9f133a6599886720f3937a7699466d23bb0cd7a88b6ba011f53c6f562", [:mix], [{:hackney, "~> 1.8", [hex: :hackney, repo: "hexpm", optional: false]}], "hexpm"},
   "idna": {:hex, :idna, "5.1.0", "d72b4effeb324ad5da3cab1767cb16b17939004e789d8c0ad5b70f3cea20c89a", [:rebar3], [{:unicode_util_compat, "0.3.1", [hex: :unicode_util_compat, repo: "hexpm", optional: false]}], "hexpm"},
-  "kaguya": {:hex, :kaguya, "0.6.4", "a1a66a6796442ef988597b2eb99fb4ad4b144e9424a0ade881e5b2b77e161082", [:mix], [], "hexpm"},
+  "kaguya": {:git, "https://github.com/Luminarys/Kaguya.git", "e82d25f046358ef62e4c7ad8726246f5afd70c0b", [ref: "e82d25f"]},
   "metrics": {:hex, :metrics, "1.0.1", "25f094dea2cda98213cecc3aeff09e940299d950904393b2a29d191c346a8486", [:rebar3], [], "hexpm"},
   "mimerl": {:hex, :mimerl, "1.0.2", "993f9b0e084083405ed8252b99460c4f0563e41729ab42d9074fd5e52439be88", [:rebar3], [], "hexpm"},
   "mochiweb": {:hex, :mochiweb, "2.15.0", "e1daac474df07651e5d17cc1e642c4069c7850dc4508d3db7263a0651330aacc", [:rebar3], [], "hexpm"},

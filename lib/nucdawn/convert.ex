@@ -46,10 +46,10 @@ defmodule Nucdawn.Convert do
     {value, ExUc.to(value, unit_two)}
   end
 
-  def format_response(nil, message) do
+  defp format_response(nil, message) do
     "I'm afraid I can't do that, #{message.user.nick}."
   end
-  def format_response({orig, result}, _) do
+  defp format_response({orig, result}, _) do
     "#{Float.to_string(orig.value)} #{Atom.to_string(orig.unit)} = #{Float.to_string(result.value)} #{Atom.to_string(result.unit)}"
   end
 end

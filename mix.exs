@@ -21,7 +21,8 @@ defmodule Nucdawn.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:kaguya, "~> 0.6"},
+      #{:kaguya, "~> 0.6"},
+      {:kaguya, git: "https://github.com/Luminarys/Kaguya.git", ref: "e82d25f"},
       {:httpoison, "~> 0.13"},
       {:floki, "~> 0.18.0"},
       {:poison, "~> 3.1", override: true},
