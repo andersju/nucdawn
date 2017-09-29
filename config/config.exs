@@ -28,6 +28,9 @@ config :nucdawn,
 # Add API key to dev.secret.exs and/or prod.secret.exs:
 # config :darkskyx,
 #   api_key: "your-key-here"
+# ...and also API key for Google Geocoding API, preferably:
+# config :nucdawn,
+#   geocoding_api_key: "your-key-here"
 config :darkskyx,
   defaults: [
     units: "auto",

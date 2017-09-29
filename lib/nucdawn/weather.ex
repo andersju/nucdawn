@@ -3,6 +3,8 @@ defmodule Nucdawn.Weather do
   import Kaguya.Module
   import Nucdawn.Helpers
 
+  defp api_key, do: Application.get_env(:nucdawn, :geocoding_api_key)
+
   defmodule Weather do
     defstruct [:text, :symbol, :temperature, :windspeed, :humidity, :currently, :hourly, :daily, :units]
   end
@@ -22,7 +24,7 @@ defmodule Nucdawn.Weather do
   end
 
   defp fetch_coordinates(place) do
-    HTTPoison.get("http://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=#{URI.encode(place)}")
+    HTTPoison.get("https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=#{URI.encode(place)}&key=#{api_key()}")
   end
 
   defp handle_coordinates({:ok, %{status_code: 200, body: body}}) do
