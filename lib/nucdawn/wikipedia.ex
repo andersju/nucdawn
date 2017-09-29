@@ -5,7 +5,7 @@ defmodule Nucdawn.Wikipedia do
   defh wikipedia do
     message.trailing
     |> get_wikipedia_snippet()
-    |> format_wikipedia_snippet()
+    |> format_wikipedia_snippet(true)
     |> truncate(400)
     |> reply()
   end
@@ -36,11 +36,15 @@ defmodule Nucdawn.Wikipedia do
        end
   end
 
-  def format_wikipedia_snippet(%{"extract" => extract, "title" => title, "lang" => lang}) do
+  def format_wikipedia_snippet(%{"extract" => extract, "title" => title, "lang" => lang}, show_url) do
     title_query = title |> String.replace(" ", "_") |> truncate(100)
     extract_stripped = extract |> String.replace("\n", " ") |> truncate(300)
-    "[WIKIPEDIA] #{title} | #{extract_stripped} | https://#{lang}.wikipedia.org/wiki/#{title_query}"
+    if show_url do
+      "[WIKIPEDIA] #{title} | #{extract_stripped} | https://#{lang}.wikipedia.org/wiki/#{title_query}"
+    else
+      "[WIKIPEDIA] #{title} | #{extract_stripped}"
+    end
   end
-  def format_wikipedia_snippet(_), do: "Sorry."
+  def format_wikipedia_snippet(_, _), do: "Sorry."
 
 end

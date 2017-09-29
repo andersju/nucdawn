@@ -20,7 +20,7 @@ defmodule Nucdawn.URL do
       %{"title" => title, "lang" => lang} ->
         title
         |> get_wikipedia_snippet(lang)
-        |> format_wikipedia_snippet()
+        |> format_wikipedia_snippet(false)
       nil ->
         url
         |> validate_url()
