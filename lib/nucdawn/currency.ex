@@ -1,4 +1,4 @@
- defmodule Nucdawn.Currency do
+defmodule Nucdawn.Currency do
   import Kaguya.Module
   import Nucdawn.Helpers
 

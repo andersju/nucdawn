@@ -46,6 +46,7 @@ defmodule Nucdawn.URL do
       {:ok, %{status_code: 200, body: body}} ->
         body
         |> Floki.find("title")
+        |> Enum.reject(fn(x) -> (x |> Tuple.to_list |> List.flatten |> Enum.count) > 2 end)
         |> Floki.text()
         |> String.replace("\r", "")
         |> String.replace("\n", "")
