@@ -3,6 +3,8 @@ defmodule Nucdawn.URL do
   import Nucdawn.Wikipedia
   import Nucdawn.Helpers
 
+  defp url_http_headers, do: Application.get_env(:nucdawn, :url_http_headers)
+
   defh url(%{trailing: input}) do
     Regex.run(~r"https?://[^\s/$.?#].[^\s]*"i, input)
     |> List.first()
@@ -42,7 +44,7 @@ defmodule Nucdawn.URL do
 
   defp get_url_info(nil), do: nil
   defp get_url_info(url) do
-    case HTTPoison.get(url) do
+    case HTTPoison.get(url, url_http_headers()) do
       {:ok, %{status_code: 200, body: body}} ->
         body
         |> Floki.find("title")

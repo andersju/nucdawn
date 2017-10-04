@@ -23,7 +23,8 @@ use Mix.Config
 
 config :nucdawn,
   url_previews: true,
-  rate_limit_scale: 5_000
+  rate_limit_scale: 5_000,
+  url_http_headers: ["Accept-Language": "en-US,en;q=0.5"]
 
 # Add API key to dev.secret.exs and/or prod.secret.exs:
 # config :darkskyx,
