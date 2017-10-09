@@ -24,6 +24,7 @@ defmodule Nucdawn.Convert do
   # Possible dirty solution: go through ExUc.Units.all() and create all atoms on startup,
   # then use a few String.to_existing_atom() below?
   defp parse_regex_result(nil), do: nil
+
   defp parse_regex_result(%{"from" => from, "to" => to}) do
     value = from |> String.trim() |> ExUc.from()
 
@@ -42,6 +43,7 @@ defmodule Nucdawn.Convert do
   end
 
   defp convert(nil), do: nil
+
   defp convert({value, unit_two}) do
     {value, ExUc.to(value, unit_two)}
   end
@@ -49,7 +51,12 @@ defmodule Nucdawn.Convert do
   defp format_response(nil, message) do
     "I'm afraid I can't do that, #{message.user.nick}."
   end
+
   defp format_response({orig, result}, _) do
-    "#{Float.to_string(orig.value)} #{Atom.to_string(orig.unit)} = #{Float.to_string(result.value)} #{Atom.to_string(result.unit)}"
+    orig_value = Float.to_string(orig.value)
+    orig_unit = Atom.to_string(orig.unit)
+    result_value = Float.to_string(result.value)
+    result_unit = Atom.to_string(result.unit)
+    "#{orig_value} #{orig_unit} = #{result_value} #{result_unit}"
   end
 end

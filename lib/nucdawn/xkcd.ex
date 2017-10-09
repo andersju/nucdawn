@@ -24,6 +24,7 @@ defmodule Nucdawn.Xkcd do
   defp get_xkcd(number), do: Xkcd.number(String.to_integer(number))
 
   defp format_xkcd({:error, msg}), do: "Sorry: #{msg}."
+
   defp format_xkcd({:ok, %Xkcd.Comic{} = comic}) do
     "https://xkcd.com/#{comic.num} | #{comic.title} | Alt: #{comic.alt}"
   end

@@ -23,6 +23,7 @@ defmodule Nucdawn.URL do
         title
         |> get_wikipedia_snippet(lang)
         |> format_wikipedia_snippet(false)
+
       nil ->
         url
         |> validate_url()
@@ -43,17 +44,20 @@ defmodule Nucdawn.URL do
   end
 
   defp get_url_info(nil), do: nil
+
   defp get_url_info(url) do
     case HTTPoison.get(url, url_http_headers()) do
       {:ok, %{status_code: 200, body: body}} ->
+        # Protection against horribly broken sites
         body
         |> Floki.find("title")
-        |> Enum.reject(fn(x) -> (x |> Tuple.to_list |> List.flatten |> Enum.count) > 2 end)
+        |> Enum.reject(fn x -> x |> Tuple.to_list() |> List.flatten() |> Enum.count() > 2 end)
         |> Floki.text()
         |> String.replace("\r", "")
         |> String.replace("\n", "")
         |> String.trim()
-        |> truncate(200) # Protection against horribly broken sites
+        |> truncate(200)
+
       _ ->
         nil
     end

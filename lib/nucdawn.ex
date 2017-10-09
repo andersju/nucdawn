@@ -8,18 +8,26 @@ defmodule Nucdawn do
 
   handle "PRIVMSG" do
     enforce :rate_limit do
-      match [".w", ".w ~title", "!w", "!w ~title"], :wikipedia, async: true
-      match [".cur :currency", "!cur :currency"], :currency, async: true
-      match [".xkcd", ".xkcd random", ".xkcd ~number",
-             "!xkcd", "!xkcd random", "!xkcd ~number"], :xkcd, async: true, uniq: true
-      match [".weather ~input", "!weather ~input"], :weather, async: true
+      match([".w", ".w ~title", "!w", "!w ~title"], :wikipedia, async: true)
+      match([".cur :currency", "!cur :currency"], :currency, async: true)
+
+      match(
+        [".xkcd", ".xkcd random", ".xkcd ~number", "!xkcd", "!xkcd random", "!xkcd ~number"],
+        :xkcd,
+        async: true,
+        uniq: true
+      )
+
+      match([".weather ~input", "!weather ~input"], :weather, async: true)
+
       if url_previews() do
-        match_re ~r"https?://[^\s/$.?#].[^\s]*"i, :url, async: true
+        match_re(~r"https?://[^\s/$.?#].[^\s]*"i, :url, async: true)
       end
     end
-    match [".rand :low :high", "!rand :low :high"], :rand, match_group: "[0-9]+"
-    match [".convert ~value", "!convert ~value"], :convert
-    match [".ccc", "!ccc"], :ccc
+
+    match([".rand :low :high", "!rand :low :high"], :rand, match_group: "[0-9]+")
+    match([".convert ~value", "!convert ~value"], :convert)
+    match([".ccc", "!ccc"], :ccc)
   end
 
   defp rate_limit(message) do

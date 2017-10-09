@@ -5,11 +5,13 @@ defmodule Nucdawn.Helpers do
       false -> string
     end
   end
+
   def truncate(value, maximum) when is_integer(value) do
     value
     |> Integer.to_string()
     |> String.slice(0, maximum)
   end
+
   def truncate(nil, _) do
     nil
   end

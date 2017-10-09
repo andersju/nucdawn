@@ -6,11 +6,23 @@ defmodule Nucdawn.Weather do
   defp api_key, do: Application.get_env(:nucdawn, :geocoding_api_key)
 
   defmodule Weather do
-    defstruct [:text, :symbol, :temperature, :windspeed, :humidity, :currently, :hourly, :daily, :units]
+    defstruct [
+      :text,
+      :symbol,
+      :temperature,
+      :windspeed,
+      :humidity,
+      :currently,
+      :hourly,
+      :daily,
+      :units
+    ]
   end
 
   defh weather(%{"input" => input}) do
-    %{"place" => place, "units" => units} = Regex.named_captures(~r/^((?<units>si|us)\s)?(?<place>.*)/, input)
+    %{"place" => place, "units" => units} =
+      Regex.named_captures(~r/^((?<units>si|us)\s)?(?<place>.*)/, input)
+
     units = if units == "", do: "auto", else: units
 
     place
@@ -24,24 +36,32 @@ defmodule Nucdawn.Weather do
   end
 
   defp fetch_coordinates(place) do
-    HTTPoison.get("https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=#{URI.encode(place)}&key=#{api_key()}")
+    HTTPoison.get(
+      "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=#{URI.encode(place)}&key=#{
+        api_key()
+      }"
+    )
   end
 
   defp handle_coordinates({:ok, %{status_code: 200, body: body}}) do
     result =
       body
-      |> Poison.decode!
+      |> Poison.decode!()
       |> get_in(["results"])
       |> List.first()
 
-    %{"lat" => result["geometry"]["location"]["lat"],
+    %{
+      "lat" => result["geometry"]["location"]["lat"],
       "lng" => result["geometry"]["location"]["lng"],
-      "text" => result["formatted_address"]}
+      "text" => result["formatted_address"]
+    }
   end
+
   defp handle_coordinates(nil), do: nil
 
   defp fetch_weather(nil, _units), do: nil
   defp fetch_weather(%{"lat" => nil}, _units), do: nil
+
   defp fetch_weather(%{"lat" => lat, "lng" => lng, "text" => text}, units) do
     {Darkskyx.forecast(lat, lng, %Darkskyx{units: units}), text}
   end
@@ -59,14 +79,19 @@ defmodule Nucdawn.Weather do
       units: weather["flags"]["units"]
     }
   end
+
   defp handle_weather({_, _}), do: nil
 
   defp format_weather(%Weather{} = weather) do
     temp_unit = get_temp_unit(weather.units)
     wind_unit = get_wind_unit(weather.units)
     temperature = show_c_and_f(weather.temperature, temp_unit)
-    "#{weather.text}: #{weather.symbol} #{temperature}. Humidity: #{weather.humidity}%. Wind: #{weather.windspeed} #{wind_unit}. #{weather.hourly} #{weather.daily}"
+
+    "#{weather.text}: #{weather.symbol} #{temperature}. " <>
+      "Humidity: #{weather.humidity}%. Wind: #{weather.windspeed} #{wind_unit}. " <>
+      "#{weather.hourly} #{weather.daily}"
   end
+
   defp format_weather(nil), do: "Sorry. I failed. :("
 
   defp get_symbol(icon) do
@@ -84,10 +109,11 @@ defmodule Nucdawn.Weather do
   end
 
   defp show_c_and_f(temperature, "°C") do
-    "#{round(temperature)}°C (#{round(temperature * (9/5) + 32)}°F)"
+    "#{round(temperature)}°C (#{round(temperature * (9 / 5) + 32)}°F)"
   end
+
   defp show_c_and_f(temperature, "°F") do
-    "#{round(temperature)}°F (#{round((temperature - 32) / (9/5))}°C)"
+    "#{round(temperature)}°F (#{round((temperature - 32) / (9 / 5))}°C)"
   end
 
   defp get_temp_unit(n) when n in ["si", "ca", "uk2"], do: "°C"

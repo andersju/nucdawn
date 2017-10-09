@@ -22,24 +22,32 @@ defmodule Nucdawn.Currency do
   end
 
   defp fetch_currency_ticker(nil), do: nil
+
   defp fetch_currency_ticker(coin) do
     case HTTPoison.get("https://api.coinmarketcap.com/v1/ticker/#{coin}/?convert=EUR") do
       {:ok, %{status_code: 200, body: body}} ->
         body
-        |> Poison.decode!
+        |> Poison.decode!()
         |> List.first()
-      _ -> nil
+
+      _ ->
+        nil
     end
   end
 
   defp format_currency_ticker(nil), do: "I'm afraid I couldn't do that, Dave."
+
   defp format_currency_ticker(data) do
     time =
       data["last_updated"]
-      |> String.to_integer
-      |> DateTime.from_unix!
-      |> DateTime.to_string
+      |> String.to_integer()
+      |> DateTime.from_unix!()
+      |> DateTime.to_string()
 
-    "#{data["name"]} (#{data["symbol"]}): #{data["price_usd"]} USD / #{data["price_eur"] |> String.to_float |> Float.round(2)} EUR. 1h/24h/7d: #{data["percent_change_1h"]}% #{data["percent_change_24h"]}% #{data["percent_change_7d"]}%. Last updated #{time}." 
+    price_eur = data["price_eur"] |> String.to_float() |> Float.round(2)
+
+    "#{data["name"]} (#{data["symbol"]}): #{data["price_usd"]} USD / #{price_eur} EUR. 1h/24h/7d: " <>
+      "#{data["percent_change_1h"]}% #{data["percent_change_24h"]}% #{data["percent_change_7d"]}%. " <>
+      "Last updated #{time}."
   end
 end
