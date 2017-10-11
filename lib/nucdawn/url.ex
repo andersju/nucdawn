@@ -28,7 +28,7 @@ defmodule Nucdawn.URL do
         url
         |> validate_url()
         |> get_url_info()
-        |> format_url_info(url)
+        |> format_url_info()
     end
   end
 
@@ -48,22 +48,37 @@ defmodule Nucdawn.URL do
   defp get_url_info(url) do
     case HTTPoison.get(url, url_http_headers()) do
       {:ok, %{status_code: 200, body: body}} ->
-        # Protection against horribly broken sites
-        body
-        |> Floki.find("title")
-        |> Enum.reject(fn x -> x |> Tuple.to_list() |> List.flatten() |> Enum.count() > 2 end)
-        |> Floki.text()
-        |> String.replace("\r", "")
-        |> String.replace("\n", "")
-        |> String.trim()
-        |> truncate(200)
+        {truncate(get_title(body), 120), truncate(get_description(body), 280)}
 
       _ ->
         nil
     end
   end
 
-  defp format_url_info("", _url), do: nil
-  defp format_url_info(nil, _url), do: nil
-  defp format_url_info(title, url), do: "[ #{title} ] - #{URI.parse(url).host}"
+  defp get_title(body) do
+    body
+    |> Floki.find("title")
+    |> Enum.reject(fn x -> x |> Tuple.to_list() |> List.flatten() |> Enum.count() > 2 end)
+    |> get_clean_text()
+  end
+
+  defp get_description(body) do
+    body
+    |> Floki.find("meta[name=description]")
+    |> Floki.attribute("content")
+    |> get_clean_text()
+  end
+
+  defp get_clean_text(list) do
+    list
+    |> Floki.text()
+    |> String.replace("\r", "")
+    |> String.replace("\n", "")
+    |> String.trim()
+  end
+
+  defp format_url_info(""), do: nil
+  defp format_url_info(nil), do: nil
+  defp format_url_info({title, ""}), do: "[WEB] #{title}"
+  defp format_url_info({title, description}), do: "[WEB] #{title} | #{description}"
 end
