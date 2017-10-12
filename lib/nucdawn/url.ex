@@ -45,14 +45,19 @@ defmodule Nucdawn.URL do
   end
 
   defp check_content_type(nil), do: nil
+
   defp check_content_type(url) do
     case HTTPoison.head(url, url_http_headers()) do
       {:ok, %{status_code: 200, headers: headers}} ->
-        content_type = headers |> Map.new() |> Map.get("Content-Type")
-        case String.contains?(content_type, "text/html") do
-          true -> url
-          _ -> nil
-        end
+        headers
+        |> Enum.any?(fn {name, value} ->
+             String.contains?(String.downcase(name), "content-type") &&
+               String.contains?(String.downcase(value), "text/html")
+           end)
+        |> case do
+             true -> url
+             false -> nil
+           end
 
       _ ->
         nil
@@ -60,6 +65,7 @@ defmodule Nucdawn.URL do
   end
 
   defp get_url_info(nil), do: nil
+
   defp get_url_info(url) do
     case HTTPoison.get(url, url_http_headers()) do
       {:ok, %{status_code: 200, body: body}} ->
