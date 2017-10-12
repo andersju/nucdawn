@@ -27,7 +27,7 @@ defmodule Nucdawn.URL do
       nil ->
         url
         |> validate_url()
-        |> check_content_type()
+        |> check_location_and_type()
         |> get_url_info()
         |> format_url_info()
     end
@@ -44,24 +44,32 @@ defmodule Nucdawn.URL do
        end
   end
 
-  defp check_content_type(nil), do: nil
+  defp check_location_and_type(nil), do: nil
 
-  defp check_content_type(url) do
-    case HTTPoison.head(url, url_http_headers()) do
-      {:ok, %{status_code: 200, headers: headers}} ->
-        headers
-        |> Enum.any?(fn {name, value} ->
-             String.contains?(String.downcase(name), "content-type") &&
-               String.contains?(String.downcase(value), "text/html")
-           end)
-        |> case do
-             true -> url
-             false -> nil
-           end
+  defp check_location_and_type(url) do
+    case :hackney.request("head", url, url_http_headers(), <<>>, follow_redirect: true) do
+      {:ok, {:maybe_redirect, _, headers, _}} ->
+        case is_html?(headers) do
+          true -> :hackney.redirect_location(headers)
+          false -> nil
+        end
+
+      {:ok, 200, headers} ->
+        case is_html?(headers) do
+          true -> url
+          false -> nil
+        end
 
       _ ->
         nil
     end
+  end
+
+  defp is_html?(headers) do
+    Enum.any?(headers, fn {name, value} ->
+      String.contains?(String.downcase(name), "content-type") &&
+        String.contains?(String.downcase(value), "text/html")
+    end)
   end
 
   defp get_url_info(nil), do: nil
