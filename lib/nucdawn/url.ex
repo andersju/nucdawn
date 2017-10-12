@@ -27,6 +27,7 @@ defmodule Nucdawn.URL do
       nil ->
         url
         |> validate_url()
+        |> check_content_type()
         |> get_url_info()
         |> format_url_info()
     end
@@ -43,8 +44,22 @@ defmodule Nucdawn.URL do
        end
   end
 
-  defp get_url_info(nil), do: nil
+  defp check_content_type(nil), do: nil
+  defp check_content_type(url) do
+    case HTTPoison.head(url, url_http_headers()) do
+      {:ok, %{status_code: 200, headers: headers}} ->
+        content_type = headers |> Map.new() |> Map.get("Content-Type")
+        case String.contains?(content_type, "text/html") do
+          true -> url
+          _ -> nil
+        end
 
+      _ ->
+        nil
+    end
+  end
+
+  defp get_url_info(nil), do: nil
   defp get_url_info(url) do
     case HTTPoison.get(url, url_http_headers()) do
       {:ok, %{status_code: 200, body: body}} ->
@@ -79,6 +94,6 @@ defmodule Nucdawn.URL do
 
   defp format_url_info(""), do: nil
   defp format_url_info(nil), do: nil
-  defp format_url_info({title, ""}), do: "[WEB] #{title}"
-  defp format_url_info({title, description}), do: "[WEB] #{title} | #{description}"
+  defp format_url_info({title, ""}), do: "#{title}"
+  defp format_url_info({title, description}), do: "#{title} | #{description}"
 end
