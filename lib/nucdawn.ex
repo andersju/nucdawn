@@ -18,7 +18,7 @@ defmodule Nucdawn do
         uniq: true
       )
 
-      match([".weather ~input", "!weather ~input"], :weather, async: true)
+      match([".weather", ".weather ~input", "!weather ~input"], :weather, async: true)
 
       if url_previews() do
         match_re(~r"https?://[^\s/$.?#].[^\s]*"i, :url, async: true)

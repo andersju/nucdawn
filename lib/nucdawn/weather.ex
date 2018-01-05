@@ -2,6 +2,7 @@ defmodule Nucdawn.Weather do
   # Ideas borrowed from https://github.com/ryanwinchester/hedwig_weather
   import Kaguya.Module
   import Nucdawn.Helpers
+  import Nucdawn.Misc
 
   defp api_key, do: Application.get_env(:nucdawn, :geocoding_api_key)
 
@@ -19,9 +20,18 @@ defmodule Nucdawn.Weather do
     ]
   end
 
-  defh weather(%{"input" => input}) do
-    %{"place" => place, "units" => units} =
-      Regex.named_captures(~r/^((?<units>si|us)\s)?(?<place>.*)/, input)
+  defh weather do
+    if message.trailing == ".weather" do
+      geoinfo =
+        message.user.host
+        |> get_ip_by_host()
+        |> get_geolocation_by_ip()
+      place = geoinfo.city.name <> ", " <> geoinfo.country.name
+      units = "auto"
+    else
+      %{"place" => place, "units" => units} =
+        Regex.named_captures(~r/^.weather ((?<units>si|us)\s)?(?<place>.*)/, message.trailing)
+    end
 
     units = if units == "", do: "auto", else: units
 

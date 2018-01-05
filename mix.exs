@@ -33,7 +33,8 @@ defmodule Nucdawn.Mixfile do
       {:ex_uc, "~> 1.0"},
       {:public_suffix, "~> 0.5"},
       {:idna, "~> 5.0", override: true},
-      {:credo, "~> 0.8", only: [:dev, :test], runtime: false}
+      {:geolix, "~> 0.15"},
+      {:credo, "~> 0.8", only: [:dev, :test], runtime: false},
     ]
   end
 end

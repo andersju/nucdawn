@@ -101,4 +101,13 @@ config :ex_uc, :area_conversions,
   fifa_field_to_m2: 7140,
   belgium_to_km2: 30528
 
+config :geolix,
+  databases: [
+    %{
+      id:      :city,
+      adapter: Geolix.Adapter.MMDB2,
+      source:  "priv/GeoLite2-City.mmdb"
+    }
+  ]
+
 import_config "#{Mix.env}.exs"

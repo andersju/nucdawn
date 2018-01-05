@@ -25,4 +25,19 @@ defmodule Nucdawn.Misc do
         reply("Next Congress in #{Date.diff(next_year_ccc_date, Date.utc_today())} days!")
     end
   end
+
+  def get_geolocation_by_ip(ip) do
+    ip
+    |> Geolix.lookup(where: :city, locale: :en)
+  end
+
+  def get_ip_by_host(host) do
+    host
+    |> String.to_charlist()
+    |> :inet.gethostbyname()
+    |> case do
+         {:error, _} -> nil
+         {:ok, hostent} -> hostent |> elem(5) |> hd |> Tuple.to_list() |> Enum.join(".")
+       end
+  end
 end
