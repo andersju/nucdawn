@@ -26,7 +26,12 @@ defmodule Nucdawn.Weather do
         message.user.host
         |> get_ip_by_host()
         |> get_geolocation_by_ip()
-      place = geoinfo.city.name <> ", " <> geoinfo.country.name
+
+      place =
+        case geoinfo.city do
+          nil -> geoinfo.country.name
+          _ -> geoinfo.city.name <> ", " <> geoinfo.country.name
+        end
       units = "auto"
     else
       %{"place" => place, "units" => units} =
