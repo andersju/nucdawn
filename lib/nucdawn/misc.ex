@@ -36,7 +36,7 @@ defmodule Nucdawn.Misc do
     |> String.to_charlist()
     |> :inet.gethostbyname()
     |> case do
-         {:error, _} -> nil
+         {:error, _} -> host # Probably IPv6 address. Very ugly workaround. FIXME
          {:ok, hostent} -> hostent |> elem(5) |> hd |> Tuple.to_list() |> Enum.join(".")
        end
   end
