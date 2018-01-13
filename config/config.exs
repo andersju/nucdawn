@@ -24,7 +24,9 @@ use Mix.Config
 config :nucdawn,
   url_previews: true,
   rate_limit_scale: 5_000,
-  url_http_headers: ["Accept-Language": "en-US,en;q=0.5"]
+  url_http_headers: ["Accept-Language": "en-US,en;q=0.5"],
+  url_whitelist: true,
+  url_whitelist_domains: ["imdb.com", "twitter.com", "youtube.com", "vimeo.com"]
 
 # Add API key to dev.secret.exs and/or prod.secret.exs:
 # config :darkskyx,

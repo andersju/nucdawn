@@ -4,6 +4,7 @@ defmodule Nucdawn.URL do
   import Nucdawn.Helpers
 
   defp url_http_headers, do: Application.get_env(:nucdawn, :url_http_headers)
+  defp url_whitelist, do: Application.get_env(:nucdawn, :url_whitelist)
 
   defh url(%{trailing: input}) do
     Regex.run(~r"https?://[^\s/$.?#].[^\s]*"i, input)
@@ -27,6 +28,7 @@ defmodule Nucdawn.URL do
       nil ->
         url
         |> validate_url()
+        |> check_whitelist()
         |> check_location_and_type()
         |> get_url_info()
         |> format_url_info()
@@ -42,6 +44,19 @@ defmodule Nucdawn.URL do
          true -> url
          false -> nil
        end
+  end
+
+  defp check_whitelist(url) do
+    if url_whitelist() do
+      Application.get_env(:nucdawn, :url_whitelist_domains)
+      |> Enum.member?(url |> URI.parse() |> Map.get(:host) |> PublicSuffix.registrable_domain())
+      |> case do
+           true -> url
+           false -> nil
+         end
+    else
+      url
+    end
   end
 
   defp check_location_and_type(nil), do: nil
@@ -108,6 +123,6 @@ defmodule Nucdawn.URL do
 
   defp format_url_info(""), do: nil
   defp format_url_info(nil), do: nil
-  defp format_url_info({title, ""}), do: "#{title}"
+  defp format_url_info({title, ""}), do: nil
   defp format_url_info({title, description}), do: "#{title} | #{description}"
 end
