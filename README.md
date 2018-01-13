@@ -9,7 +9,6 @@ the sparse docs); just putting it out there in case it can help someone else.
 This is purely a utility bot -- there's no user handling at the moment.
 Commands (might or might not be up-to-date):
 
-* `.convert <value> <unit> to <unit>`: Unit conversion (length, mass, time, etc.); see below.
 * `.cur <currency>`: Fetch currency ticker using [coinmarketcap.com's](https://coinmarketcap.com/) public API. btc, bch, eth are currently supported; add/change by editing `lib/nucdawn/currency.ex`.
 * `.rand <low> <high>`: Random number between `<low>` and `<high>` (inclusive).
 * `.w` (without arguments): Random article from English Wikipedia (title, extract and URL).
@@ -37,12 +36,6 @@ in `config/dev.secret.exs` and/or `config/prod.secret.exs`:
 config :darkskyx,
   api_key: "YOUR_API_KEY_HERE"
 ```
-
-### Conversions
-Thanks to [ExUc](https://github.com/carturoch/ex_uc) various conversions are
-possible; see the ExUc page for supported units (and how to add more), or do
-`ExUc.Units.all` in `iex`, which also gives you the alias(es) for each unit.
-Some custom ones are defined in `config/config.exs`.
 
 ### Credits
 Inspiration/ideas: [Sopel](https://github.com/sopel-irc/sopel), [Roseline](https://github.com/DoumanAsh/Roseline), [twitch-kuma-elixir](https://github.com/KumaKaiNi/twitch-kuma-elixir).

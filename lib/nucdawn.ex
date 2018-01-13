@@ -1,6 +1,6 @@
 defmodule Nucdawn do
   use Kaguya.Module, "Nucdawn"
-  import Nucdawn.{Convert, Currency, Misc, URL, Weather, Wikipedia, Xkcd}
+  import Nucdawn.{Currency, Misc, URL, Weather, Wikipedia, Xkcd}
   require Logger
 
   defp url_previews, do: Application.get_env(:nucdawn, :url_previews)
@@ -26,7 +26,6 @@ defmodule Nucdawn do
     end
 
     match([".rand :low :high", "!rand :low :high"], :rand, match_group: "[0-9]+")
-    match([".convert ~value", "!convert ~value"], :convert)
     match([".ccc", "!ccc"], :ccc)
   end
 

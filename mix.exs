@@ -30,7 +30,6 @@ defmodule Nucdawn.Mixfile do
       {:xkcd, "~> 0.0.1"},
       {:darkskyx, "~> 0.1.1"},
       {:ex_rated, "~> 1.2"},
-      {:ex_uc, "~> 1.0"},
       {:public_suffix, "~> 0.5"},
       {:idna, "~> 5.0", override: true},
       {:geolix, "~> 0.15"},
