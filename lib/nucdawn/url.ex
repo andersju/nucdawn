@@ -12,9 +12,9 @@ defmodule Nucdawn.URL do
     |> handle_url()
     |> truncate(400)
     |> case do
-         nil -> nil
-         text -> reply(text)
-       end
+      nil -> nil
+      text -> reply(text)
+    end
   end
 
   defp handle_url(url) do
@@ -41,9 +41,9 @@ defmodule Nucdawn.URL do
     |> Map.get(:host)
     |> PublicSuffix.matches_explicit_rule?()
     |> case do
-         true -> url
-         false -> nil
-       end
+      true -> url
+      false -> nil
+    end
   end
 
   defp check_whitelist(url) do
@@ -51,9 +51,9 @@ defmodule Nucdawn.URL do
       Application.get_env(:nucdawn, :url_whitelist_domains)
       |> Enum.member?(url |> URI.parse() |> Map.get(:host) |> PublicSuffix.registrable_domain())
       |> case do
-           true -> url
-           false -> nil
-         end
+        true -> url
+        false -> nil
+      end
     else
       url
     end

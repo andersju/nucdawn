@@ -6,7 +6,7 @@ defmodule Nucdawn.Mixfile do
       app: :nucdawn,
       version: "0.1.0",
       elixir: "~> 1.5",
-      start_permanent: Mix.env == :prod,
+      start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
   end
@@ -21,7 +21,7 @@ defmodule Nucdawn.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      #{:kaguya, "~> 0.6"},
+      # {:kaguya, "~> 0.6"},
       {:kaguya, git: "https://github.com/Luminarys/Kaguya.git", ref: "e82d25f"},
       {:httpoison, "~> 0.13"},
       {:floki, "~> 0.18.0"},
@@ -33,7 +33,7 @@ defmodule Nucdawn.Mixfile do
       {:public_suffix, "~> 0.5"},
       {:idna, "~> 5.0", override: true},
       {:geolix, "~> 0.15"},
-      {:credo, "~> 0.8", only: [:dev, :test], runtime: false},
+      {:credo, "~> 0.8", only: [:dev, :test], runtime: false}
     ]
   end
 end

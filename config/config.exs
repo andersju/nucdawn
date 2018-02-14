@@ -43,10 +43,10 @@ config :darkskyx,
 config :geolix,
   databases: [
     %{
-      id:      :city,
+      id: :city,
       adapter: Geolix.Adapter.MMDB2,
-      source:  "priv/GeoLite2-City.mmdb"
+      source: "priv/GeoLite2-City.mmdb"
     }
   ]
 
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"

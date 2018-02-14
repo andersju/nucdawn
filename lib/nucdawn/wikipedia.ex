@@ -33,14 +33,14 @@ defmodule Nucdawn.Wikipedia do
     title
     |> String.replace(~r"^(\.|!)w\s?", "")
     |> case do
-         "" ->
-           "https://#{lang}.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&exchars=300&redirects&grnnamespace=0&generator=random"
+      "" ->
+        "https://#{lang}.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&exchars=300&redirects&grnnamespace=0&generator=random"
 
-         title ->
-           "https://#{lang}.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&exchars=300&redirects&titles=#{
-             URI.encode(title)
-           }"
-       end
+      title ->
+        "https://#{lang}.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&exchars=300&redirects&titles=#{
+          URI.encode(title)
+        }"
+    end
   end
 
   def format_wikipedia_snippet(

@@ -32,6 +32,7 @@ defmodule Nucdawn.Weather do
           nil -> geoinfo.country.name
           _ -> geoinfo.city.name <> ", " <> geoinfo.country.name
         end
+
       units = "auto"
     else
       %{"place" => place, "units" => units} =
