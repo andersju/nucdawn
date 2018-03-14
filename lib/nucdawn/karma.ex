@@ -2,10 +2,19 @@ defmodule Nucdawn.Karma do
   import Kaguya.Module
   import Nucdawn.Helpers
 
-  defh add_karma(%{"subject" => subject}) do
-    IO.inspect message
-    channel = message.args |> List.to_string()
+  defp rate_limit_karma_scale, do: Application.get_env(:nucdawn, :rate_limit_karma_scale)
 
+  defh add_karma(%{"subject" => subject}) do
+    channel = message.args |> List.to_string()
+    rate_limit_string = channel <> message.user.nick <> message.trailing
+
+    case ExRated.check_rate(rate_limit_string, rate_limit_karma_scale(), 1) do
+      {:ok, _} -> add_karma(channel, subject, message)
+      {:error, _} -> reply "Not so fast, buddy boy."
+    end
+  end
+
+  defp add_karma(channel, subject, message) do
     cond do
       String.downcase(message.user.nick) == String.downcase(subject) ->
         Nucdawn.Db.add_karma("karma", channel, String.downcase(subject), -1)
@@ -32,21 +41,21 @@ defmodule Nucdawn.Karma do
 
     message.trailing
     |> String.slice(7, 23)
-    |> check_input()
+    |> check_input(message.user.nick)
     |> get_karma(channel)
     |> truncate(400)
     |> reply()
   end
 
-  defp check_input(input) do
+  defp check_input(input, nick \\ nil) do
     # Thanks to Phrogz @ https://stackoverflow.com/a/5163309
     case Regex.run(~r/\A[a-z_\-\[\]\\^{}|`][a-z0-9_\-\[\]\\^{}|`]{1,15}\z/i, input) do
-      nil -> nil
+      nil -> nick
       n -> List.first(n)
     end
   end
 
-  defp get_karma(nil, channel) do
+  defp get_top_karma(nil, channel) do
     receivers = Nucdawn.Db.get_top_karma("karma", channel)
     givers = Nucdawn.Db.get_top_karma("karma-giver", channel)
 

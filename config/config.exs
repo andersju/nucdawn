@@ -24,7 +24,8 @@ use Mix.Config
 config :nucdawn,
   karma_tracking: true,
   url_previews: true,
-  rate_limit_scale: 5_000,
+  rate_limit_scale: 5_000, # 5 seconds
+  rate_limit_karma_scale: 1_200_000, # 20 minutes
   url_http_headers: ["Accept-Language": "en-US,en;q=0.5"],
   url_whitelist: true,
   url_whitelist_domains: ["imdb.com", "twitter.com", "youtube.com", "vimeo.com"]
