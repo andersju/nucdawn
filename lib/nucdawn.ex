@@ -23,6 +23,7 @@ defmodule Nucdawn do
 
       if karma_tracking() do
         match(["+1 ~subject"], :add_karma, async: true)
+        match(["-1 ~subject"], :remove_karma, async: true)
         match([".karma", ".karma ~subject"], :show_karma, async: true)
       end
 

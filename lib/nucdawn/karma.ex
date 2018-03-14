@@ -23,6 +23,10 @@ defmodule Nucdawn.Karma do
     end
   end
 
+  defh remove_karma do
+    reply "Love can only be given, #{message.user.nick}."
+  end
+
   defh show_karma do
     channel = message.args |> List.to_string()
 
