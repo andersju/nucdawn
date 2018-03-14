@@ -22,6 +22,7 @@ use Mix.Config
 #
 
 config :nucdawn,
+  karma_tracking: true,
   url_previews: true,
   rate_limit_scale: 5_000,
   url_http_headers: ["Accept-Language": "en-US,en;q=0.5"],

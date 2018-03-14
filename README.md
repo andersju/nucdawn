@@ -9,6 +9,7 @@ the sparse docs); just putting it out there in case it can help someone else.
 This is purely a utility bot -- there's no user handling at the moment.
 Commands (might or might not be up-to-date):
 
+* `+1 <user>`: Give karma. Currently the bot doesn't check if `<user>` is actually a nick present in the channel, so any word is accepted, however separate scores for users and arbitrary strings would be easy to implement. `.karma` shows top 5 (both receivers/givers) and `.karma <user>` shows stats for a specific user. Data is stored with [PersistentEts](https://github.com/michalmuskala/persistent_ets) ("Ets table backed by a persistence file"), so no external dependencies.
 * `.cur <currency>`: Fetch currency ticker using [coinmarketcap.com's](https://coinmarketcap.com/) public API. btc, bch, eth are currently supported; add/change by editing `lib/nucdawn/currency.ex`.
 * `.rand <low> <high>`: Random number between `<low>` and `<high>` (inclusive).
 * `.w` (without arguments): Random article from English Wikipedia (title, extract and URL).

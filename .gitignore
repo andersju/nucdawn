@@ -23,3 +23,5 @@ erl_crash.dump
 /config/dev.secret.exs
 
 /priv/*.mmdb
+
+*.tab

@@ -14,7 +14,8 @@ defmodule Nucdawn.Mixfile do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger, :persistent_ets],
+      mod: {Nucdawn.Application, []}
     ]
   end
 
@@ -33,7 +34,8 @@ defmodule Nucdawn.Mixfile do
       {:public_suffix, "~> 0.5"},
       {:idna, "~> 5.0", override: true},
       {:geolix, "~> 0.15"},
-      {:credo, "~> 0.8", only: [:dev, :test], runtime: false}
+      {:credo, "~> 0.8", only: [:dev, :test], runtime: false},
+      {:persistent_ets, "~> 0.1.0"}
     ]
   end
 end

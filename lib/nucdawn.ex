@@ -1,8 +1,9 @@
 defmodule Nucdawn do
   use Kaguya.Module, "Nucdawn"
-  import Nucdawn.{Currency, Misc, URL, Weather, Wikipedia, Xkcd}
+  import Nucdawn.{Currency, Karma, Misc, URL, Weather, Wikipedia, Xkcd}
   require Logger
 
+  defp karma_tracking, do: Application.get_env(:nucdawn, :karma_tracking)
   defp url_previews, do: Application.get_env(:nucdawn, :url_previews)
   defp rate_limit_scale, do: Application.get_env(:nucdawn, :rate_limit_scale)
 
@@ -19,6 +20,11 @@ defmodule Nucdawn do
       )
 
       match([".weather", ".weather ~input", "!weather ~input"], :weather, async: true)
+
+      if karma_tracking() do
+        match(["+1 :subject"], :add_karma, async: true)
+        match([".karma", ".karma :subject"], :show_karma, async: true)
+      end
 
       if url_previews() do
         match_re(~r"https?://[^\s/$.?#].[^\s]*"i, :url, async: true)
