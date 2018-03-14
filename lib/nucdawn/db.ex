@@ -10,7 +10,7 @@ defmodule Nucdawn.Db do
 
   def init(_) do
     table = PersistentEts.new(@table, "db.tab", [:named_table, :public])
-    Logger.info("Persistent ETS table #{@table} created")
+    Logger.info("Persistent ETS table #{@table} created/loaded")
 
     {:ok, table}
   end
