@@ -15,11 +15,11 @@ defmodule Nucdawn.Db do
     {:ok, table}
   end
 
-  def add_karma(type, channel, subject) do
-    # Increment subject's karma by one; default value of 0 (before incrementation) if subject
+  def add_karma(type, channel, subject, amount) do
+    # Increment/decrement subject's karma by amount; default value of 0 if subject
     # isn't already in the table
     @table
-    |> :ets.update_counter({type, channel, subject}, {2, 1}, {{type, channel, subject}, 0})
+    |> :ets.update_counter({type, channel, subject}, {2, amount}, {{type, channel, subject}, 0})
   end
 
   def get_karma(type, channel, subject) do

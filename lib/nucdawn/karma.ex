@@ -3,17 +3,23 @@ defmodule Nucdawn.Karma do
   import Nucdawn.Helpers
 
   defh add_karma(%{"subject" => subject}) do
+    IO.inspect message
     channel = message.args |> List.to_string()
 
-    if check_input(subject) do
-      Nucdawn.Db.add_karma("karma", channel, String.downcase(subject))
-      Nucdawn.Db.add_karma("karma-giver", channel, String.downcase(message.user.nick))
+    cond do
+      String.downcase(message.user.nick) == String.downcase(subject) ->
+        Nucdawn.Db.add_karma("karma", channel, String.downcase(subject), -1)
+        current_karma = Nucdawn.Db.get_karma("karma", channel, String.downcase(subject))
+        reply "#{subject}: -1 for narcissism. You now have #{current_karma}."
+      check_input(subject) ->
+        Nucdawn.Db.add_karma("karma", channel, String.downcase(subject), 1)
+        Nucdawn.Db.add_karma("karma-giver", channel, String.downcase(message.user.nick), 1)
 
-      current_karma = Nucdawn.Db.get_karma("karma", channel, String.downcase(subject))
+        current_karma = Nucdawn.Db.get_karma("karma", channel, String.downcase(subject))
 
-      "#{subject} now has a karma of #{current_karma}."
-      |> truncate(400)
-      |> reply()
+        "#{subject} now has a karma of #{current_karma}."
+        |> truncate(400)
+        |> reply()
     end
   end
 
@@ -42,7 +48,7 @@ defmodule Nucdawn.Karma do
 
     case receivers do
       [] ->
-        "Nobody's got positive karma."
+        "Nobody's got karma."
 
       _ ->
         "Top receivers of Internet points: " <>
