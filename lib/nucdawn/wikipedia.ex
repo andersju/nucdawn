@@ -11,8 +11,15 @@ defmodule Nucdawn.Wikipedia do
   end
 
   def get_wikipedia_snippet(title, lang \\ "en") do
-    url = get_wikipedia_url(title, lang)
+    {random, url} = get_wikipedia_url(title, lang)
 
+    case random do
+      true -> get_wikipedia_random(url, lang)
+      false -> get_wikipedia_search(url, lang)
+    end
+  end
+
+  defp get_wikipedia_random(url, lang) do
     case HTTPoison.get(url) do
       {:ok, %{status_code: 200, body: body}} ->
         body
@@ -23,9 +30,36 @@ defmodule Nucdawn.Wikipedia do
         |> elem(1)
         |> Map.take(["title", "extract"])
         |> Map.put("lang", lang)
-
       _ ->
         nil
+    end
+  end
+
+  # TODO: Make less messy
+  defp get_wikipedia_search(url, lang) do
+    json =
+     case HTTPoison.get(url) do
+       {:ok, %{status_code: 200, body: body}} ->
+         body
+         |> Poison.decode!()
+       _ ->
+        nil
+     end
+
+    if json do
+      if json["query"]["searchinfo"]["totalhits"] > 0 do
+        result = json |> get_in(["query", "search"]) |> List.first()
+        %{"snippet" => snippet, "title" => title} = result
+        %{"extract" => snippet <> "...", "title" => title, "lang" => lang}
+      else
+        if json["query"]["searchinfo"]["suggestion"] do
+          get_wikipedia_snippet(json["query"]["searchinfo"]["suggestion"])
+        else
+          nil
+        end
+      end
+    else
+      nil
     end
   end
 
@@ -34,21 +68,17 @@ defmodule Nucdawn.Wikipedia do
     |> String.replace(~r"^(\.|!)w\s?", "")
     |> case do
       "" ->
-        "https://#{lang}.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&exchars=300&redirects&grnnamespace=0&generator=random"
+        {true, "https://#{lang}.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&exchars=300&redirects&grnnamespace=0&generator=random"}
 
       title ->
-        "https://#{lang}.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&exchars=300&redirects&titles=#{
-          URI.encode(title)
-        }"
+        {false, "https://#{lang}.wikipedia.org/w/api.php?format=json&action=query&list=search&srsearch=#{
+          URI.encode(title)}"}
     end
   end
 
-  def format_wikipedia_snippet(
-        %{"extract" => extract, "title" => title, "lang" => lang},
-        show_url
-      ) do
+  def format_wikipedia_snippet(%{"extract" => extract, "title" => title, "lang" => lang}, show_url) do
     title_query = title |> String.replace(" ", "_") |> truncate(100)
-    extract_stripped = extract |> String.replace("\n", " ") |> truncate(300)
+    extract_stripped = extract |> String.replace("\n", " ") |> HtmlSanitizeEx.strip_tags() |> truncate(300)
 
     if show_url do
       "[WIKIPEDIA] #{title} | #{extract_stripped} | https://#{lang}.wikipedia.org/wiki/#{
