@@ -20,31 +20,8 @@ defmodule Nucdawn.Weather do
     ]
   end
 
-  # TODO: Make this less ugly
   defh weather do
-    geoinfo =
-      if message.trailing == ".weather" do
-        message.user.host
-        |> get_ip_by_host()
-        |> get_geolocation_by_ip()
-      end
-
-    place =
-      if message.trailing == ".weather" do
-        case geoinfo.city do
-          nil -> geoinfo.country.name
-          _ -> geoinfo.city.name <> ", " <> geoinfo.country.name
-        end
-      end
-
-    units = if message.trailing == ".weather", do: "auto"
-
-    %{"place" => place, "units" => units} =
-      if message.trailing != ".weather" do
-        Regex.named_captures(~r/^.weather ((?<units>si|us)\s)?(?<place>.*)/, message.trailing)
-      end
-
-    units = if units == "", do: "auto", else: units
+    {place, units} = get_place_and_units(message)
 
     place
     |> fetch_coordinates()
@@ -54,6 +31,29 @@ defmodule Nucdawn.Weather do
     |> format_weather()
     |> truncate(400)
     |> reply()
+  end
+
+  defp get_place_and_units(message) do
+    if message.trailing == ".weather" do
+      geoinfo =
+        message.user.host
+        |> get_ip_by_host()
+        |> get_geolocation_by_ip()
+
+      place =
+        case geoinfo.city do
+          nil -> geoinfo.country.name
+          _ -> geoinfo.city.name <> ", " <> geoinfo.country.name
+        end
+      {place, "auto"}
+    else
+      %{"place" => place, "units" => units} =
+        Regex.named_captures(~r/^.weather ((?<units>si|us)\s)?(?<place>.*)/, message.trailing)
+
+      units = if units == "", do: "auto", else: units
+
+      {place, units}
+    end
   end
 
   defp fetch_coordinates(place) do
