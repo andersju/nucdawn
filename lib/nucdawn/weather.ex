@@ -20,24 +20,29 @@ defmodule Nucdawn.Weather do
     ]
   end
 
+  # TODO: Make this less ugly
   defh weather do
-    if message.trailing == ".weather" do
-      geoinfo =
+    geoinfo =
+      if message.trailing == ".weather" do
         message.user.host
         |> get_ip_by_host()
         |> get_geolocation_by_ip()
+      end
 
-      place =
+    place =
+      if message.trailing == ".weather" do
         case geoinfo.city do
           nil -> geoinfo.country.name
           _ -> geoinfo.city.name <> ", " <> geoinfo.country.name
         end
+      end
 
-      units = "auto"
-    else
-      %{"place" => place, "units" => units} =
+    units = if message.trailing == ".weather", do: "auto"
+
+    %{"place" => place, "units" => units} =
+      if message.trailing != ".weather" do
         Regex.named_captures(~r/^.weather ((?<units>si|us)\s)?(?<place>.*)/, message.trailing)
-    end
+      end
 
     units = if units == "", do: "auto", else: units
 
