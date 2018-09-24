@@ -28,7 +28,7 @@ config :nucdawn,
   rate_limit_karma_scale: 1_200_000, # 20 minutes
   url_http_headers: ["Accept-Language": "en-US,en;q=0.5"],
   url_whitelist: true,
-  url_whitelist_domains: ["imdb.com", "twitter.com", "youtube.com", "vimeo.com"]
+  url_whitelist_domains: ["imdb.com", "twitter.com", "youtube.com", "vimeo.com", "youtu.be"]
 
 # Add API key to dev.secret.exs and/or prod.secret.exs:
 # config :darkskyx,

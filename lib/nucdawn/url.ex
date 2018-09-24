@@ -64,10 +64,7 @@ defmodule Nucdawn.URL do
   defp check_location_and_type(url) do
     case :hackney.request("head", url, url_http_headers(), <<>>, follow_redirect: true) do
       {:ok, {:maybe_redirect, _, headers, _}} ->
-        case is_html?(headers) do
-          true -> :hackney.redirect_location(headers)
-          false -> nil
-        end
+        :hackney.redirect_location(headers)
 
       {:ok, 200, headers} ->
         case is_html?(headers) do
@@ -123,6 +120,6 @@ defmodule Nucdawn.URL do
 
   defp format_url_info(""), do: nil
   defp format_url_info(nil), do: nil
-  defp format_url_info({title, ""}), do: nil
+  defp format_url_info({title, ""}), do: "#{title}"
   defp format_url_info({title, description}), do: "#{title} | #{description}"
 end
