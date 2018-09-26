@@ -5,6 +5,7 @@ defmodule Nucdawn.URL do
 
   defp url_http_headers, do: Application.get_env(:nucdawn, :url_http_headers)
   defp url_whitelist, do: Application.get_env(:nucdawn, :url_whitelist)
+  defp url_rewrites, do: Application.get_env(:nucdawn, :url_rewrites)
 
   defh url(%{trailing: input}) do
     Regex.run(~r"https?://[^\s/$.?#].[^\s]*"i, input)
@@ -29,6 +30,7 @@ defmodule Nucdawn.URL do
         url
         |> validate_url()
         |> check_whitelist()
+        |> rewrite_url()
         |> check_location_and_type()
         |> get_url_info()
         |> format_url_info()
@@ -57,6 +59,12 @@ defmodule Nucdawn.URL do
     else
       url
     end
+  end
+
+  defp rewrite_url(url) do
+    url_parsed = URI.parse(url)
+    host = Map.get(url_rewrites(), url_parsed.host, url_parsed.host)
+    "#{url_parsed.scheme}://#{host}:#{url_parsed.port}#{url_parsed.path}/#{url_parsed.fragment}"
   end
 
   defp check_location_and_type(nil), do: nil
