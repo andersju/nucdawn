@@ -104,9 +104,19 @@ defmodule Nucdawn.URL do
   end
 
   defp get_description(body) do
+    meta_description = extract_from_html(body, "meta[name=description]", "content")
+
+    if meta_description == "" do
+      extract_from_html(body, ~s(meta[property="og:description"]), "content")
+    else
+      meta_description
+    end
+  end
+
+  def extract_from_html(body, selector, attribute) do
     body
-    |> Floki.find("meta[name=description]")
-    |> Floki.attribute("content")
+    |> Floki.find(selector)
+    |> Floki.attribute(attribute)
     |> get_clean_text()
   end
 
@@ -120,6 +130,6 @@ defmodule Nucdawn.URL do
 
   defp format_url_info(""), do: nil
   defp format_url_info(nil), do: nil
-  defp format_url_info({title, ""}), do: "#{title}"
+  defp format_url_info({_title, ""}), do: nil
   defp format_url_info({title, description}), do: "#{title} | #{description}"
 end
