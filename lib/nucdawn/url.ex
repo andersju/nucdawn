@@ -64,7 +64,7 @@ defmodule Nucdawn.URL do
   defp rewrite_url(url) do
     url_parsed = URI.parse(url)
     host = Map.get(url_rewrites(), url_parsed.host, url_parsed.host)
-    "#{url_parsed.scheme}://#{host}:#{url_parsed.port}#{url_parsed.path}/#{url_parsed.fragment}"
+    "#{url_parsed.scheme}://#{host}:#{url_parsed.port}#{url_parsed.path}?#{url_parsed.query}\##{url_parsed.fragment}"
   end
 
   defp check_location_and_type(nil), do: nil
