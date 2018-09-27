@@ -4,7 +4,7 @@ config :kaguya,
   server: "localhost",
   port: 6667,
   bot_name: "nucdawn",
-  channels: ["#blargh"],
+  channels: ["#blargh", "#blurgh"],
   help_cmd: ".help",
   use_ssl: false
 

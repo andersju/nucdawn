@@ -5,10 +5,12 @@ defmodule Nucdawn.Weather do
   import Nucdawn.Misc
 
   defp api_key, do: Application.get_env(:nucdawn, :geocoding_api_key)
+  defp country_icons, do: Application.get_env(:nucdawn, :country_icons)
 
   defmodule Weather do
     defstruct [
       :text,
+      :country,
       :symbol,
       :temperature,
       :windspeed,
@@ -71,10 +73,20 @@ defmodule Nucdawn.Weather do
       |> get_in(["results"])
       |> List.first()
 
+    country =
+      result["address_components"]
+      |> Enum.filter(fn x -> Enum.member?(Map.get(x, "types", []), "country") end)
+      |> List.first
+      |> case do
+           result when is_map(result) -> Map.get(result, "short_name", nil)
+           nil -> nil
+         end
+
     %{
       "lat" => result["geometry"]["location"]["lat"],
       "lng" => result["geometry"]["location"]["lng"],
-      "text" => result["formatted_address"]
+      "text" => result["formatted_address"],
+      "country" => country
     }
   end
 
@@ -83,13 +95,14 @@ defmodule Nucdawn.Weather do
   defp fetch_weather(nil, _units), do: nil
   defp fetch_weather(%{"lat" => nil}, _units), do: nil
 
-  defp fetch_weather(%{"lat" => lat, "lng" => lng, "text" => text}, units) do
-    {Darkskyx.forecast(lat, lng, %Darkskyx{units: units}), text}
+  defp fetch_weather(%{"lat" => lat, "lng" => lng, "text" => text, "country" => country}, units) do
+    {Darkskyx.forecast(lat, lng, %Darkskyx{units: units}), text, country}
   end
 
-  defp handle_weather({{:ok, weather}, text}) do
+  defp handle_weather({{:ok, weather}, text, country}) do
     %Weather{
       text: text,
+      country: country,
       symbol: get_symbol(weather["currently"]["icon"]),
       temperature: weather["currently"]["temperature"],
       windspeed: weather["currently"]["windSpeed"],
@@ -107,13 +120,19 @@ defmodule Nucdawn.Weather do
     temp_unit = get_temp_unit(weather.units)
     wind_unit = get_wind_unit(weather.units)
     temperature = show_c_and_f(weather.temperature, temp_unit)
+    country_icon = get_country_icon(weather.country)
 
-    "#{weather.text}: #{weather.symbol} #{temperature}. " <>
+    "#{weather.text}#{country_icon}: #{weather.symbol} #{temperature}. " <>
       "Humidity: #{weather.humidity}%. Wind: #{weather.windspeed} #{wind_unit}. " <>
       "#{weather.hourly} #{weather.daily}"
   end
 
   defp format_weather(nil), do: "Sorry. I failed. :("
+
+  defp get_country_icon(code) do
+    icon = Map.get(country_icons(), code, nil)
+    if icon, do: " #{icon}", else: ""
+  end
 
   defp get_symbol(icon) do
     cond do

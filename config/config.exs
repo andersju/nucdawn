@@ -31,6 +31,13 @@ config :nucdawn,
   url_whitelist_domains: ["imdb.com", "twitter.com", "youtube.com", "vimeo.com", "youtu.be"],
   url_rewrites: %{
     "mobile.twitter.com" => "twitter.com",
+  },
+  random_channels: [],
+  random_strings: ["test", "zzzfoo"],
+  country_icons: %{
+    "US" => "🦅",
+    "CA" => "🏒",
+    "FR" => "🥖"
   }
 
 # Add API key to dev.secret.exs and/or prod.secret.exs:
