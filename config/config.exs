@@ -35,9 +35,18 @@ config :nucdawn,
   random_channels: [],
   random_strings: ["test", "zzzfoo"],
   country_icons: %{
-    "US" => "🦅",
+    "US" => "🤠",
     "CA" => "🏒",
-    "FR" => "🥖"
+    "FR" => "🥖",
+    "MX" => "🦅",
+    "NO" => "⛷",
+    "SE" => "⛷",
+    "FI" => "🗡",
+    "DK" => "🍻",
+    "IE" => "☘",
+    "UK" => "♕",
+    "NL" => "🌿",
+    "IT" => "🏎"
   }
 
 # Add API key to dev.secret.exs and/or prod.secret.exs:

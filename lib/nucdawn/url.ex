@@ -61,6 +61,8 @@ defmodule Nucdawn.URL do
     end
   end
 
+  defp rewrite_url(nil), do: nil
+
   defp rewrite_url(url) do
     url_parsed = URI.parse(url)
     host = Map.get(url_rewrites(), url_parsed.host, url_parsed.host)

@@ -25,6 +25,6 @@ defmodule Nucdawn.Randomly do
   end
 
   defp schedule_work() do
-    Process.send_after(self(), :work, Enum.random(3600*10..3600*20) * 1000)
+    Process.send_after(self(), :work, Enum.random(3600*8..3600*20) * 1000)
   end
 end
