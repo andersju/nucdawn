@@ -125,7 +125,7 @@ defmodule Nucdawn.Weather do
       #day = x["temperatureMinTime"] |> DateTime.from_unix!() |> Date.day_of_week() |> day_to_string()
       high = round(x["temperatureHigh"])
       low = round(x["temperatureMin"])
-      acc ++ ["#{low}/#{high}"]
+      acc ++ ["#{high}/#{low}"]
       end)
     |> Enum.join(", ")
   end
@@ -139,7 +139,7 @@ defmodule Nucdawn.Weather do
     "#{weather.text}#{country_icon}: #{weather.symbol} #{temperature}. " <>
       "Humidity: #{weather.humidity}%. Wind: #{weather.windspeed} #{wind_unit}. " <>
       "#{weather.hourly} #{weather.daily} " <>
-      "Low/high (#{temp_unit}) today + next 3 days: #{weather.highlow}."
+      "High/low (#{temp_unit}) today + next 3 days: #{weather.highlow}."
   end
 
   defp format_weather(nil), do: "Sorry. I failed. :("
