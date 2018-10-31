@@ -18,7 +18,8 @@ defmodule Nucdawn.Weather do
       :currently,
       :hourly,
       :daily,
-      :units
+      :units,
+      :highlow
     ]
   end
 
@@ -110,11 +111,24 @@ defmodule Nucdawn.Weather do
       currently: weather["currently"]["summary"],
       hourly: weather["hourly"]["summary"],
       daily: weather["daily"]["summary"],
-      units: weather["flags"]["units"]
+      units: weather["flags"]["units"],
+      highlow: get_high_low(weather["daily"]["data"])
     }
   end
 
   defp handle_weather({_, _}), do: nil
+
+  defp get_high_low(data) do
+    data
+    |> Enum.take(4)
+    |> Enum.reduce([], fn(x, acc) ->
+      #day = x["temperatureMinTime"] |> DateTime.from_unix!() |> Date.day_of_week() |> day_to_string()
+      high = round(x["temperatureHigh"])
+      low = round(x["temperatureMin"])
+      acc ++ ["#{low}/#{high}"]
+      end)
+    |> Enum.join(", ")
+  end
 
   defp format_weather(%Weather{} = weather) do
     temp_unit = get_temp_unit(weather.units)
@@ -124,7 +138,8 @@ defmodule Nucdawn.Weather do
 
     "#{weather.text}#{country_icon}: #{weather.symbol} #{temperature}. " <>
       "Humidity: #{weather.humidity}%. Wind: #{weather.windspeed} #{wind_unit}. " <>
-      "#{weather.hourly} #{weather.daily}"
+      "#{weather.hourly} #{weather.daily} " <>
+      "Low/high (#{temp_unit}) today + next 3 days: #{weather.highlow}."
   end
 
   defp format_weather(nil), do: "Sorry. I failed. :("
