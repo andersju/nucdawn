@@ -20,7 +20,7 @@ defmodule Nucdawn.URL do
 
   defp handle_url(url) do
     # Let the Wikipedia module handle wikipedia.org URLs
-    case Regex.named_captures(~r"(?<lang>[a-z]+).(wikipedia.org/wiki/)(?<title>[^ ]+)", url) do
+    case Regex.named_captures(~r"(?<lang>[a-z]+).(m\.)?(wikipedia.org/wiki/)(?<title>[^ ]+)", url) do
       %{"title" => title, "lang" => lang} ->
         title
         |> get_wikipedia_snippet(lang)

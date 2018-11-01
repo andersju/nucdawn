@@ -89,5 +89,5 @@ defmodule Nucdawn.Wikipedia do
     end
   end
 
-  def format_wikipedia_snippet(_, _), do: "Sorry."
+  def format_wikipedia_snippet(_, _), do: raise "Oops."
 end
