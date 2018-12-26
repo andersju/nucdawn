@@ -14,6 +14,8 @@ defmodule Nucdawn.Misc do
     current_year_ccc_date = Date.from_iso8601!("#{current_year}-12-27")
 
     case Date.diff(current_year_ccc_date, Date.utc_today()) do
+      d when d == 1 ->
+        reply("Next Congress in #{Date.diff(current_year_ccc_date, Date.utc_today())} day!")
       d when d > 0 ->
         reply("Next Congress in #{Date.diff(current_year_ccc_date, Date.utc_today())} days!")
 
